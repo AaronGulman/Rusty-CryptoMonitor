@@ -1,0 +1,13 @@
+[package]
+name = "RustGUIOne"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+slint = "1.11.0"
+rand = "0.9.1"
+
+
+
+[build-dependencies]
+slint-build = "1.11.0"
