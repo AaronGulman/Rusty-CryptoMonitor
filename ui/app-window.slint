@@ -1,0 +1,39 @@
+import { Button, StandardButton } from "std-widgets.slint";
+
+export component MainWindow inherits Window{
+               min-width: 200px;
+               min-height: 400px;
+               no-frame: true;
+                in-out property<string> bit_price: "Loading...";
+                callback mouse_move(length,length);
+                TouchArea {
+                moved => {
+                root.mouse_move(self.mouse-x - self.pressed-x , self.mouse-y - self.pressed-y);
+                }
+                }
+
+        title: "Live Info";
+        background: transparent;
+          Rectangle {
+               width: 200px;
+               height: 400px;
+               background: #0D1117;
+
+               Rectangle {
+                   width: 100%;
+                   height: 30px;
+                   background: #FF9900;
+                   x: 0;
+                   y: parent.y - 1px;
+                   Text {
+                   font-size: 1rem;
+                    font-weight: 900;
+                    x:parent.x + 10px;
+                    padding: 10px;
+                    text: "BTC PRICE: " + root.bit_price;
+                    color: #fff;
+
+                   }
+               }
+           }
+}
