@@ -1,3 +1,5 @@
+
+![CryptoRusty](https://github.com/user-attachments/assets/ad6a2653-7c43-43ee-aac5-2478afcc859f)
 # Rusty🦀CryptoMonitor
 This is a lightweight and efficient crypto market widget built with Rust.
 It gives you live updates for cryptocurrency prices, starting with Bitcoin (BTC), in a super clean and simple interface. We’re talking no distractions, just the essentials!
