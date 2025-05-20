@@ -3,7 +3,7 @@
 version = 4
 
 [[package]]
-name = "RustGUIOne"
+name = "CryptoMonitor"
 version = "0.1.0"
 dependencies = [
  "futures",
