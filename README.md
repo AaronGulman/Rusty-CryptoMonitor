@@ -16,4 +16,4 @@ It’s perfect for anyone who wants to keep an eye on the market without all the
 - #### **Minimal Design:** It’s no-nonsense. Just the market data you need.
 
 
-‼️ **This is still the very first prototype, so there’s a lot more to come!** ‼️ 
+‼️ **This is still the very first prototype, so there’s a lot more to come** ‼️ 
