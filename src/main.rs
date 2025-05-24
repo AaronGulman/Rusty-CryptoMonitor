@@ -7,10 +7,23 @@ use std::str::FromStr;
 use futures::{SinkExt, StreamExt};
 use i_slint_backend_winit::WinitWindowAccessor;
 use serde::__private::de::IdentifierDeserializer;
+use serde::Serialize;
+use serde_json::json;
 use slint::{ComponentHandle, SharedString};
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 
 slint::include_modules!();
+
+#[derive(Serialize,Debug)]
+struct CoinStruct{
+    coin_name: String,
+    currency: str,
+}
+
+fn coin_builder(coin_name: String, currency: &str) -> String{
+    let coin = coin_name.clone() + "-" + currency;
+    coin
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -18,23 +31,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let url = "wss://advanced-trade-ws.coinbase.com";
 
     let (mut ws_stream, response) = connect_async(url).await.expect("Failed to connect");
-
-    let subscribe_message = r#"{
+    let coin_list = vec!["BTC".to_string(),"ETH".to_string(),"LTC".to_string()];
+    let cur_list = vec!["USD".to_string(),"EUR".to_string()];
+    let coin_ticker = coin_builder(coin_list[0].to_string(),cur_list[0].as_str());
+    let subscribe_message = json!({
         "type": "subscribe",
-        "product_ids": ["BTC-USD"],
+        "product_ids": [coin_ticker],
         "channel": "ticker"
-    }"#;
+    });
+
+    println!("Coin ticker: {:?}",subscribe_message);
 
     ws_stream
         .send(Message::Text(subscribe_message.to_string().into()))
         .await?;
 
     let main_window = MainWindow::new().unwrap();
+    let settings_window = SettingsWindow::new().unwrap();
     main_window
         .window()
         .set_position(slint::LogicalPosition::new(0.0, 0.0));
     let ui_handle = main_window.as_weak();
-    
+
     // make main_window draggable
     /*    main_window.on_mouse_move(move |delta_x, delta_y| {
         let ui_handle = ui_handle.unwrap();
