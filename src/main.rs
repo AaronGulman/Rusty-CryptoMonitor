@@ -1,46 +1,47 @@
-mod lua_engine;
 mod crypto_data;
+mod lua_engine;
 mod ui_bridge;
-use ui_bridge::{ui_bridge,UIStore};
+use ui_bridge::{UIStore, ui_bridge};
 mod config;
-use std::str::FromStr;
 use futures::{SinkExt, StreamExt};
 use i_slint_backend_winit::WinitWindowAccessor;
 use serde::__private::de::IdentifierDeserializer;
 use serde::Serialize;
 use serde_json::json;
 use slint::{ComponentHandle, SharedString};
+use std::str::FromStr;
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 
 slint::include_modules!();
 
-#[derive(Serialize,Debug)]
-struct CoinStruct{
+#[derive(Serialize, Debug)]
+struct CoinStruct {
     coin_name: String,
     currency: str,
 }
 
-fn coin_builder(coin_name: String, currency: &str) -> String{
+fn coin_builder(coin_name: String, currency: &str) -> String {
     let coin = coin_name.clone() + "-" + currency;
     coin
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let UIStore {bg,t} = ui_bridge();
+    let UIStore { bg, t } = ui_bridge();
     let url = "wss://advanced-trade-ws.coinbase.com";
 
     let (mut ws_stream, response) = connect_async(url).await.expect("Failed to connect");
-    let coin_list = vec!["BTC".to_string(),"ETH".to_string(),"LTC".to_string()];
-    let cur_list = vec!["USD".to_string(),"EUR".to_string()];
-    let coin_ticker = coin_builder(coin_list[0].to_string(),cur_list[0].as_str());
+    let coin_list = vec!["BTC".to_string(), "ETH".to_string(), "LTC".to_string()];
+    let cur_list = vec!["USD".to_string(), "EUR".to_string()];
+    let coin_ticker = coin_builder(coin_list[1].to_string(), cur_list[0].as_str());
+    
     let subscribe_message = json!({
         "type": "subscribe",
         "product_ids": [coin_ticker],
         "channel": "ticker"
     });
 
-    println!("Coin ticker: {:?}",subscribe_message);
+    println!("Coin ticker: {:?}", subscribe_message);
 
     ws_stream
         .send(Message::Text(subscribe_message.to_string().into()))
@@ -99,6 +100,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     main_window.set_background_color(bg);
     main_window.set_text_color(t);
+    main_window.set_coin_name(SharedString::from(coin_list[1].to_string()));
     main_window.run();
     Ok(())
 }
