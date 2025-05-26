@@ -1,10 +1,15 @@
-import { Button, StandardButton } from "std-widgets.slint";
+ import { Button, StandardButton, Button, ComboBox } from "std-widgets.slint";
+
 
 export component MainWindow inherits Window{
                min-width: 200px;
                min-height: 400px;
-               no-frame: true;
                 in-out property<string> bit_price: "Loading...";
+                in-out property <brush> background_color;
+                in-out property <brush> text_color;
+                in-out property <string> coin_name;
+
+
                 callback mouse_move(length,length);
                 TouchArea {
                 moved => {
@@ -17,7 +22,7 @@ export component MainWindow inherits Window{
           Rectangle {
                width: 200px;
                height: 400px;
-               background: #0D1117;
+               background: root.background_color;
 
                Rectangle {
                    width: 100%;
@@ -26,14 +31,49 @@ export component MainWindow inherits Window{
                    x: 0;
                    y: parent.y - 1px;
                    Text {
-                   font-size: 1rem;
+                    font-size: 1rem;
                     font-weight: 900;
                     x:parent.x + 10px;
                     padding: 10px;
-                    text: "BTC PRICE: " + root.bit_price;
-                    color: #fff;
+                    text: root.coin_name +": $" + root.bit_price;
+                    color: root.text_color;
 
                    }
                }
            }
+           MenuBar {
+            Menu {
+                title: "Settings";
+                MenuItem {
+                title: "Open";
+
+                }
+
+                }
+
+            }
+                            popup := PopupWindow{
+                            Rectangle {
+                            height: 100%;
+                            width: 100%;
+                            background: #000;
+                            }
+                            }
+        TouchArea {
+        height: 100%;
+        width: 100%;
+/*        pointer-event(event) => {
+            if(event.button == PointerEventButton.right){
+
+            popup.show();
+            }
+        }*/
+        }
+           }
+
+export component SettingsWindow inherits Window{
+               min-width: 500px;
+               min-height: 600px;
+               background: #000;
+
 }
