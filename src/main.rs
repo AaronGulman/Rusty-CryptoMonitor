@@ -29,11 +29,11 @@ fn coin_builder(coin_name: String, currency: &str) -> String {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let UIStore { bg, t } = ui_bridge();
     let url = "wss://advanced-trade-ws.coinbase.com";
-
+    
     let (mut ws_stream, response) = connect_async(url).await.expect("Failed to connect");
     let coin_list = vec!["BTC".to_string(), "ETH".to_string(), "LTC".to_string()];
     let cur_list = vec!["USD".to_string(), "EUR".to_string()];
-    let coin_ticker = coin_builder(coin_list[1].to_string(), cur_list[0].as_str());
+    let coin_ticker = coin_builder(coin_list[0].to_string(), cur_list[0].as_str());
     
     let subscribe_message = json!({
         "type": "subscribe",
@@ -48,12 +48,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await?;
 
     let main_window = MainWindow::new().unwrap();
-    let settings_window = SettingsWindow::new().unwrap();
-    main_window
+    let settings_window = SettingsWindow::new().unwrap();   
+    settings_window.window().set_position(slint::LogicalPosition::new(0.0, 0.0));
+    let chosen_value = settings_window.get_coin_name();
+    let choose_value = chosen_value.clone();
+    settings_window.on_change_value(move || {
+        settings_window.set_coin_name(chosen_value)
+    }
+    );
+    
+    // settings_window.as_weak().upgrade().unwrap().get_coin_name();
+
+
+        main_window 
         .window()
         .set_position(slint::LogicalPosition::new(0.0, 0.0));
+    
+    
+    
     let ui_handle = main_window.as_weak();
-
+    let ui_settings_handle = settings_window.as_weak();
+    
+    
     // make main_window draggable
     /*    main_window.on_mouse_move(move |delta_x, delta_y| {
         let ui_handle = ui_handle.unwrap();
@@ -100,7 +116,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     main_window.set_background_color(bg);
     main_window.set_text_color(t);
-    main_window.set_coin_name(SharedString::from(coin_list[1].to_string()));
+    main_window.set_coin_name(SharedString::from(coin_list[0].to_string()));
+    main_window.on_open_settings(move || {
+        settings_window.run();
+    });
     main_window.run();
     Ok(())
 }
