@@ -13,6 +13,7 @@ futures = "0.3"
 tungstenite = "0.26.2"
 i-slint-backend-winit = "1.11.0"
 mlua = {version = "0.10.3",features = ["lua54"]}
+reqwest = "0.12.18"
 
 [build-dependencies]
 slint-build = "1.11.0"
