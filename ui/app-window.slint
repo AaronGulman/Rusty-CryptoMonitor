@@ -1,4 +1,5 @@
- import { Button, StandardButton, Button, ComboBox } from "std-widgets.slint";
+import { CheckBox, Button, StandardButton, Button, ComboBox } from "std-widgets.slint";
+import { SettingsWindow } from "settings-window.slint";
 
 
 export component MainWindow inherits Window{
@@ -9,7 +10,7 @@ export component MainWindow inherits Window{
                 in-out property <brush> text_color;
                 in-out property <string> coin_name;
 
-
+                callback open_settings;
                 callback mouse_move(length,length);
                 TouchArea {
                 moved => {
@@ -46,7 +47,9 @@ export component MainWindow inherits Window{
                 title: "Settings";
                 MenuItem {
                 title: "Open";
-
+                activated => {
+                root.open_settings()
+                }
                 }
 
                 }
@@ -59,21 +62,53 @@ export component MainWindow inherits Window{
                             background: #000;
                             }
                             }
-        TouchArea {
-        height: 100%;
-        width: 100%;
 /*        pointer-event(event) => {
             if(event.button == PointerEventButton.right){
 
             popup.show();
             }
         }*/
-        }
-           }
+    }
 
+/*
 export component SettingsWindow inherits Window{
                min-width: 500px;
                min-height: 600px;
                background: #000;
+
+}
+*/
+
+export component SettingsWindow inherits Window{
+//    callback open_settings();
+    in-out property <string> coin_name;
+    min-height: 200px;
+    min-width: 200px;
+
+    background: #000;
+
+    title: "Settings";
+    full-screen: true;
+
+
+    cb := ComboBox {
+
+    min-height: 200px;
+    min-width: 200px;
+    model: ["BTC","ETH"];
+    selected(current-value) => {change_value()}
+     }
+
+
+    coin_name: cb.current-value;
+     Text {
+     height: 100px;
+     width: 200px;
+     text: coin_name;
+     }
+     
+     callback change_value;
+
+
 
 }
