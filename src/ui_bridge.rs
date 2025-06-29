@@ -30,7 +30,7 @@ pub fn ui_bridge() -> UIStore{
     let t_red:f32 = txt_table.get(2).unwrap();
     let t_green:f32 = txt_table.get(3).unwrap();
     let t_blue:f32 = txt_table.get(4).unwrap();
-    
+
     println!("{} {} {}",r,g,b);
 
     let t_color = from_argb_f32(t_a/255.0,t_red/255.0,t_green/255.0,t_blue/255.0);

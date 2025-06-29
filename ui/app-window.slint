@@ -82,17 +82,15 @@ export component SettingsWindow inherits Window{
 export component SettingsWindow inherits Window{
 //    callback open_settings();
     in-out property <string> coin_name;
+    
     min-height: 200px;
     min-width: 200px;
-
     background: #000;
 
     title: "Settings";
     full-screen: true;
 
-
     cb := ComboBox {
-
     min-height: 200px;
     min-width: 200px;
     model: ["BTC","ETH"];
