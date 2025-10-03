@@ -25,6 +25,9 @@ fn coin_builder(coin_name: String, currency: &str) -> String {
     coin
 }
 
+
+
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let UIStore { bg, t } = ui_bridge();
@@ -51,11 +54,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let settings_window = SettingsWindow::new().unwrap();   
     settings_window.window().set_position(slint::LogicalPosition::new(0.0, 0.0));
     let chosen_value = settings_window.get_coin_name();
-    let choose_value = chosen_value.clone();
-    settings_window.on_change_value(move || {
-        settings_window.set_coin_name(chosen_value)
-    }
-    );
+    let choose_value:String = String::from(chosen_value.clone());
+/*    settings_window.on_change_value(move || {
+        settings_window.set_coin_name(SharedString::from(choose_value))
+    } 
+    );*/
     
     // settings_window.as_weak().upgrade().unwrap().get_coin_name();
 
@@ -98,7 +101,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                                 ui.set_bit_price(price_string);
                                             })
                                             .unwrap();
-                                        println!("BTC Price: {}", price);
+                                        println!("{} Price: {}",chosen_value, price);
                                     }
                                 }
                             }
@@ -114,6 +117,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     });
 
+    crypto_data::main().await?;
     main_window.set_background_color(bg);
     main_window.set_text_color(t);
     main_window.set_coin_name(SharedString::from(coin_list[0].to_string()));
